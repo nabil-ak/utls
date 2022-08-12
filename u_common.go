@@ -120,8 +120,10 @@ const (
 	helloRandomizedNoALPN = "Randomized-NoALPN"
 	helloCustom           = "Custom"
 	helloFirefox          = "Firefox"
+	helloOpera            = "Opera"
 	helloChrome           = "Chrome"
 	helloIOS              = "iOS"
+	helloSafari           = "Safari"
 	helloAndroid          = "Android"
 	helloEdge             = "Edge"
 	helloSafari           = "Safari"
@@ -173,23 +175,33 @@ var (
 	HelloFirefox_102  = ClientHelloID{helloFirefox, "102", nil}
 	HelloFirefox_105  = ClientHelloID{helloFirefox, "105", nil}
 
-	HelloChrome_Auto        = HelloChrome_102
-	HelloChrome_58          = ClientHelloID{helloChrome, "58", nil}
-	HelloChrome_62          = ClientHelloID{helloChrome, "62", nil}
-	HelloChrome_70          = ClientHelloID{helloChrome, "70", nil}
-	HelloChrome_72          = ClientHelloID{helloChrome, "72", nil}
-	HelloChrome_83          = ClientHelloID{helloChrome, "83", nil}
-	HelloChrome_87          = ClientHelloID{helloChrome, "87", nil}
-	HelloChrome_96          = ClientHelloID{helloChrome, "96", nil}
-	HelloChrome_100         = ClientHelloID{helloChrome, "100", nil}
-	HelloChrome_102         = ClientHelloID{helloChrome, "102", nil}
-	HelloChrome_106_Shuffle = ClientHelloID{helloChrome, "106", nil} // beta: shuffler enabled starting from 106
+	HelloOpera_Auto = HelloOpera_89
+	HelloOpera_89   = ClientHelloID{helloOpera, "89", nil}
 
-	HelloIOS_Auto = HelloIOS_14
+	HelloChrome_Auto = HelloChrome_104
+	HelloChrome_58   = ClientHelloID{helloChrome, "58", nil}
+	HelloChrome_62   = ClientHelloID{helloChrome, "62", nil}
+	HelloChrome_70   = ClientHelloID{helloChrome, "70", nil}
+	HelloChrome_72   = ClientHelloID{helloChrome, "72", nil}
+	HelloChrome_83   = ClientHelloID{helloChrome, "83", nil}
+	HelloChrome_87   = ClientHelloID{helloChrome, "87", nil}
+	HelloChrome_96   = ClientHelloID{helloChrome, "96", nil}
+	HelloChrome_100  = ClientHelloID{helloChrome, "100", nil}
+	HelloChrome_102  = ClientHelloID{helloChrome, "102", nil}
+	HelloChrome_103  = ClientHelloID{helloChrome, "103", nil}
+	HelloChrome_104  = ClientHelloID{helloChrome, "104", nil}
+
+	HelloIOS_Auto = HelloIOS_15_5
 	HelloIOS_11_1 = ClientHelloID{helloIOS, "111", nil} // legacy "111" means 11.1
 	HelloIOS_12_1 = ClientHelloID{helloIOS, "12.1", nil}
 	HelloIOS_13   = ClientHelloID{helloIOS, "13", nil}
 	HelloIOS_14   = ClientHelloID{helloIOS, "14", nil}
+
+	HelloIOS_15_5 = ClientHelloID{helloIOS, "15.5", nil}
+
+	HelloSafari_Auto = HelloSafari_15_5
+	HelloSafari_15_3 = ClientHelloID{helloSafari, "15.3", nil}
+	HelloSafari_15_5 = ClientHelloID{helloSafari, "15.5", nil}
 
 	HelloAndroid_11_OkHttp = ClientHelloID{helloAndroid, "11", nil}
 
