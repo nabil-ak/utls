@@ -124,7 +124,7 @@ func (hs *serverHandshakeStateTLS13) processClientHello() error {
 	}
 
 	if len(hs.clientHello.compressionMethods) != 1 ||
-		hs.clientHello.compressionMethods[0] != compressionNone {
+		hs.clientHello.compressionMethods[0] != CompressionNone {
 		c.sendAlert(alertIllegalParameter)
 		return errors.New("tls: TLS 1.3 client supports illegal compression methods")
 	}
@@ -152,7 +152,7 @@ func (hs *serverHandshakeStateTLS13) processClientHello() error {
 	}
 
 	hs.hello.sessionId = hs.clientHello.sessionId
-	hs.hello.compressionMethod = compressionNone
+	hs.hello.compressionMethod = CompressionNone
 
 	preferenceList := defaultCipherSuitesTLS13
 	if !hasAESGCMHardwareSupport || !aesgcmPreferred(hs.clientHello.cipherSuites) {
