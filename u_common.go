@@ -135,6 +135,7 @@ const (
 	helloOpera            = "Opera"
 	helloChrome           = "Chrome"
 	helloIOS              = "iOS"
+	helloIPad             = "iPad"
 	helloSafari           = "Safari"
 	helloAndroid          = "Android"
 	helloEdge             = "Edge"
@@ -205,18 +206,22 @@ var (
 	HelloChrome_104  = ClientHelloID{helloChrome, "104", nil, EmptyClientHelloSpecFactory}
 	HelloChrome_105  = ClientHelloID{helloChrome, "105", nil, EmptyClientHelloSpecFactory}
 
-	HelloIOS_Auto = HelloIOS_15_6
+	HelloIOS_Auto = HelloIOS_16_0
 	HelloIOS_11_1 = ClientHelloID{helloIOS, "111", nil, EmptyClientHelloSpecFactory} // legacy "111" means 11.1
 	HelloIOS_12_1 = ClientHelloID{helloIOS, "12.1", nil, EmptyClientHelloSpecFactory}
 	HelloIOS_13   = ClientHelloID{helloIOS, "13", nil, EmptyClientHelloSpecFactory}
 	HelloIOS_14   = ClientHelloID{helloIOS, "14", nil, EmptyClientHelloSpecFactory}
-
 	HelloIOS_15_5 = ClientHelloID{helloIOS, "15.5", nil, EmptyClientHelloSpecFactory}
 	HelloIOS_15_6 = ClientHelloID{helloIOS, "15.6", nil, EmptyClientHelloSpecFactory}
+	HelloIOS_16_0 = ClientHelloID{helloIOS, "16.0", nil, EmptyClientHelloSpecFactory}
 
-	HelloSafari_Auto = HelloSafari_15_5
-	HelloSafari_15_3 = ClientHelloID{helloSafari, "15.3", nil, EmptyClientHelloSpecFactory}
-	HelloSafari_15_5 = ClientHelloID{helloSafari, "15.5", nil, EmptyClientHelloSpecFactory}
+	HelloIPad_Auto = HelloIPad_15_6
+	HelloIPad_15_6 = ClientHelloID{helloIPad, "15.6", nil, EmptyClientHelloSpecFactory}
+
+	HelloSafari_Auto   = HelloSafari_16_0
+	HelloSafari_15_3   = ClientHelloID{helloSafari, "15.3", nil, EmptyClientHelloSpecFactory}
+	HelloSafari_15_6_1 = ClientHelloID{helloSafari, "15.6.1", nil, EmptyClientHelloSpecFactory}
+	HelloSafari_16_0   = ClientHelloID{helloSafari, "16.0", nil, EmptyClientHelloSpecFactory}
 
 	HelloAndroid_11_OkHttp = ClientHelloID{helloAndroid, "11", nil, EmptyClientHelloSpecFactory}
 

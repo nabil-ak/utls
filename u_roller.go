@@ -35,6 +35,7 @@ func NewRoller() (*Roller, error) {
 			HelloFirefox_Auto,
 			HelloOpera_Auto,
 			HelloIOS_Auto,
+			HelloIPad_Auto,
 			HelloSafari_Auto,
 			HelloRandomized,
 		},

@@ -152,7 +152,7 @@ type pskIdentity struct {
 // TLS Elliptic Curve Point Formats
 // https://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-9
 const (
-	pointFormatUncompressed uint8 = 0
+	PointFormatUncompressed uint8 = 0
 )
 
 // TLS CertificateStatusType (RFC 3546)

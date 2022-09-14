@@ -30,6 +30,7 @@ type serverHandshakeState struct {
 	suite        *cipherSuite
 	ecdheOk      bool
 	ecSignOk     bool
+	ellipticOk   bool
 	rsaDecryptOk bool
 	rsaSignOk    bool
 	sessionState *sessionState
@@ -173,6 +174,27 @@ func (hs *serverHandshakeState) processClientHello() error {
 
 	hs.hello = new(serverHelloMsg)
 	hs.hello.vers = c.vers
+
+	supportedCurve := false
+	preferredCurves := c.config.curvePreferences()
+Curves:
+	for _, curve := range hs.clientHello.supportedCurves {
+		for _, supported := range preferredCurves {
+			if supported == curve {
+				supportedCurve = true
+				break Curves
+			}
+		}
+	}
+
+	supportedPointFormat := false
+	for _, pointFormat := range hs.clientHello.supportedPoints {
+		if pointFormat == PointFormatUncompressed {
+			supportedPointFormat = true
+			break
+		}
+	}
+	hs.ellipticOk = supportedCurve && supportedPointFormat
 
 	foundCompression := false
 	// We only support null compression, so check that the client offered it.
