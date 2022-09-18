@@ -570,11 +570,14 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					GREASE_PLACEHOLDER,
 					VersionTLS13,
 					VersionTLS12,
+					//VersionTLS11,
+					//VersionTLS10,
 				}},
 				&UtlsCompressCertExtension{[]CertCompressionAlgo{
 					CertCompressionBrotli,
 				}},
-				&ALPSExtension{SupportedProtocols: []string{"h2"}},
+				//&ALPSExtension{SupportedProtocols: []string{"h2"}},
+				&ApplicationSettingsExtension{SupportedProtocols: []string{"h2"}},
 				&UtlsGREASEExtension{},
 				&UtlsPaddingExtension{GetPaddingLen: BoringPaddingStyle},
 			},
@@ -708,8 +711,6 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 			}}, nil
 	case HelloFirefox_102.Str(), HelloFirefox_104.Str():
 		return ClientHelloSpec{
-			TLSVersMin: VersionTLS10,
-			TLSVersMax: VersionTLS13,
 			CipherSuites: []uint16{
 				TLS_AES_128_GCM_SHA256,
 				TLS_CHACHA20_POLY1305_SHA256,
@@ -751,14 +752,14 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
 				&StatusRequestExtension{},
 				&GenericExtension{Id: ExtensionDelegatedCredentials},
-				/*&DelegatedCredentialsExtension{
+				&DelegatedCredentialsExtension{
 					AlgorithmsSignature: []SignatureScheme{ //signature_algorithms
 						ECDSAWithP256AndSHA256,
 						ECDSAWithP384AndSHA384,
 						ECDSAWithP521AndSHA512,
 						ECDSAWithSHA1,
 					},
-				},*/
+				},
 				&KeyShareExtension{[]KeyShare{
 					{Group: X25519},
 					{Group: CurveP256},
@@ -766,8 +767,9 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&SupportedVersionsExtension{[]uint16{
 					VersionTLS13,
 					VersionTLS12,
-					VersionTLS11,
-					VersionTLS10}},
+					// VersionTLS11,
+					// VersionTLS10
+				}},
 				&SignatureAlgorithmsExtension{SupportedSignatureAlgorithms: []SignatureScheme{
 					ECDSAWithP256AndSHA256,
 					ECDSAWithP384AndSHA384,
@@ -892,7 +894,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					CurveP384,
 				}},
 				&SupportedPointsExtension{SupportedPoints: []byte{
-					0x00, // PointFormatUncompressed
+					PointFormatUncompressed,
 				}},
 				&SessionTicketExtension{},
 				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
