@@ -508,7 +508,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&UtlsPaddingExtension{GetPaddingLen: BoringPaddingStyle},
 			},
 		}, nil
-	case HelloChrome_103.Str(), HelloChrome_104.Str(), HelloChrome_105.Str():
+	case HelloChrome_103.Str(), HelloChrome_104.Str(), HelloChrome_105.Str(), HelloChrome_106.Str():
 		return ClientHelloSpec{
 			CipherSuites: []uint16{
 				GREASE_PLACEHOLDER,
