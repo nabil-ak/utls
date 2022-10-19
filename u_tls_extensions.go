@@ -476,12 +476,13 @@ func (e *DelegatedCredentialsExtension) Read(b []byte) (int, error) {
 	if len(b) < e.Len() {
 		return 0, io.ErrShortBuffer
 	}
-	b[0] = byte(ExtensionDelegatedCredentials)
+	// https://datatracker.ietf.org/doc/html/draft-ietf-tls-subcerts-15#section-4.1.1
+	b[0] = byte(ExtensionDelegatedCredentials >> 8)
 	b[1] = byte(ExtensionDelegatedCredentials)
 	b[2] = byte((2 + 2*len(e.AlgorithmsSignature)) >> 8)
-	b[3] = byte(2 + 2*len(e.AlgorithmsSignature))
+	b[3] = byte((2 + 2*len(e.AlgorithmsSignature)))
 	b[4] = byte((2 * len(e.AlgorithmsSignature)) >> 8)
-	b[5] = byte(2 * len(e.AlgorithmsSignature))
+	b[5] = byte((2 * len(e.AlgorithmsSignature)))
 	for i, sigAndHash := range e.AlgorithmsSignature {
 		b[6+2*i] = byte(sigAndHash >> 8)
 		b[7+2*i] = byte(sigAndHash)
