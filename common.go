@@ -23,8 +23,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/bogdanfinn/utls/cpu"
 )
 
 const (

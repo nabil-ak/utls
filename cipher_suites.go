@@ -13,10 +13,33 @@ import (
 	"crypto/rc4"
 	"crypto/sha1"
 	"crypto/sha256"
-	"crypto/x509"
+	"fmt"
 	"hash"
+	"runtime"
 
+	"github.com/bogdanfinn/utls/cpu"
 	"golang.org/x/crypto/chacha20poly1305"
+)
+
+// CipherSuite is a TLS cipher suite. Note that most functions in this package
+// accept and expose cipher suite IDs instead of this type.
+type CipherSuite struct {
+	ID   uint16
+	Name string
+
+	// Supported versions is the list of TLS protocol versions that can
+	// negotiate this cipher suite.
+	SupportedVersions []uint16
+
+	// Insecure is true if the cipher suite has known security issues
+	// due to its primitives, design, or implementation.
+	Insecure bool
+}
+
+var (
+	supportedUpToTLS12 = []uint16{VersionTLS10, VersionTLS11, VersionTLS12}
+	supportedOnlyTLS12 = []uint16{VersionTLS12}
+	supportedOnlyTLS13 = []uint16{VersionTLS13}
 )
 
 // CipherSuites returns a list of cipher suites currently implemented by this

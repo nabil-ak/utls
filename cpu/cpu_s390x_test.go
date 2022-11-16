@@ -6,10 +6,11 @@ package cpu_test
 
 import (
 	"errors"
-	. "github.com/refraction-networking/utls/cpu"
 	"os"
 	"regexp"
 	"testing"
+
+	. "github.com/bogdanfinn/utls/cpu"
 )
 
 func getFeatureList() ([]string, error) {

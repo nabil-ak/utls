@@ -268,7 +268,7 @@ Curves:
 		//
 		// Per RFC 4492, section 5.1.2, implementations MUST support the
 		// uncompressed point format. See golang.org/issue/31943.
-		hs.hello.supportedPoints = []uint8{pointFormatUncompressed}
+		hs.hello.supportedPoints = []uint8{PointFormatUncompressed}
 	}
 
 	if priv, ok := hs.cert.PrivateKey.(crypto.Signer); ok {
@@ -338,7 +338,7 @@ func supportsECDHE(c *Config, supportedCurves []CurveID, supportedPoints []uint8
 
 	supportsPointFormat := false
 	for _, pointFormat := range supportedPoints {
-		if pointFormat == pointFormatUncompressed {
+		if pointFormat == PointFormatUncompressed {
 			supportsPointFormat = true
 			break
 		}

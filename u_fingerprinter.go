@@ -374,7 +374,7 @@ func (f *Fingerprinter) FingerprintClientHello(data []byte) (*ClientHelloSpec, e
 				supportedSignatureAlgorithms = append(
 					supportedSignatureAlgorithms, SignatureScheme(sigAndAlg))
 			}
-			clientHelloSpec.Extensions = append(clientHelloSpec.Extensions, &FakeDelegatedCredentialsExtension{supportedSignatureAlgorithms})
+			clientHelloSpec.Extensions = append(clientHelloSpec.Extensions, &DelegatedCredentialsExtension{supportedSignatureAlgorithms})
 
 		case ExtensionPreSharedKey:
 			// RFC 8446, Section 4.2.11
