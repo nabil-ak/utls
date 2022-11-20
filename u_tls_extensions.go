@@ -132,8 +132,8 @@ func (e *StatusRequestV2Extension) Read(b []byte) (int, error) {
 		return 0, io.ErrShortBuffer
 	}
 	// RFC 4366, section 3.6
-	b[0] = byte(17 >> 8)
-	b[1] = byte(17)
+	b[0] = byte(ExtensionStatusRequestV2 >> 8)
+	b[1] = byte(ExtensionStatusRequestV2)
 	b[2] = 0
 	b[3] = 9
 	b[4] = 0
@@ -356,17 +356,9 @@ func (e *ALPNExtension) Read(b []byte) (int, error) {
 	return e.Len(), io.EOF
 }
 
-// ApplicationSettingsExtension represents the TLS ALPS extension. At the time
-// of this writing, this extension is currently a draft:
+// ApplicationSettingsExtension represents the TLS ALPS extension.
+// At the time of this writing, this extension is currently a draft:
 // https://datatracker.ietf.org/doc/html/draft-vvv-tls-alps-01
-//
-// This library does not offer actual support for ALPS. This extension is
-// "faked" - it is advertised by the client, but not respected if the server
-// responds with support.
-//
-// In the normal convention of this library, this type name would be prefixed
-// with 'Fake'. The existing name is retained for backwards compatibility
-// reasons.
 type ApplicationSettingsExtension struct {
 	SupportedProtocols []string
 }
@@ -577,8 +569,7 @@ var extendedMasterSecretLabel = []byte("extended master secret")
 
 // extendedMasterFromPreMasterSecret generates the master secret from the pre-master
 // secret and session hash. See https://tools.ietf.org/html/rfc7627#section-4
-func extendedMasterFromPreMasterSecret(version uint16, suite *cipherSuite, preMasterSecret []byte, fh finishedHash) []byte {
-	sessionHash := fh.Sum()
+func extendedMasterFromPreMasterSecret(version uint16, suite *cipherSuite, preMasterSecret []byte, sessionHash []byte) []byte {
 	masterSecret := make([]byte, masterSecretLength)
 	prfForVersion(version, suite)(masterSecret, preMasterSecret, extendedMasterSecretLabel, sessionHash)
 	return masterSecret
@@ -959,7 +950,7 @@ func (e *FakeChannelIDExtension) Read(b []byte) (int, error) {
 	}
 	extensionID := fakeExtensionChannelID
 	if e.OldExtensionID {
-		extensionID = fakeExtensionChannelIDOld
+		extensionID = fakeOldExtensionChannelID
 	}
 	// https://tools.ietf.org/html/draft-balfanz-tls-channelid-00
 	b[0] = byte(extensionID >> 8)

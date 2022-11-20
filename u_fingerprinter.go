@@ -99,7 +99,7 @@ func (f *Fingerprinter) FingerprintClientHello(data []byte) (*ClientHelloSpec, e
 	}
 
 	var extensions cryptobyte.String
-	if !s.ReadUint16LengthPrefixed(&extensions) || !s.Empty() {
+	if !s.ReadUint16LengthPrefixed(&extensions) {
 		return nil, errors.New("unable to read extensions data")
 	}
 
@@ -321,7 +321,7 @@ func (f *Fingerprinter) FingerprintClientHello(data []byte) (*ClientHelloSpec, e
 		case fakeExtensionChannelID:
 			clientHelloSpec.Extensions = append(clientHelloSpec.Extensions, &FakeChannelIDExtension{})
 
-		case fakeExtensionChannelIDOld:
+		case fakeOldExtensionChannelID:
 			clientHelloSpec.Extensions = append(clientHelloSpec.Extensions, &FakeChannelIDExtension{true})
 
 		case fakeExtensionTokenBinding:
@@ -335,7 +335,7 @@ func (f *Fingerprinter) FingerprintClientHello(data []byte) (*ClientHelloSpec, e
 			tokenBindingExt.KeyParameters = keyParameters
 			clientHelloSpec.Extensions = append(clientHelloSpec.Extensions, &tokenBindingExt)
 
-		case fakeExtensionALPS:
+		case ExtensionALPS:
 			// Similar to ALPN (RFC 7301, Section 3.1):
 			// https://datatracker.ietf.org/doc/html/draft-vvv-tls-alps#section-3
 			var protoList cryptobyte.String

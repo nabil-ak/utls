@@ -33,7 +33,8 @@ type UConn struct {
 
 	greaseSeed [ssl_grease_last_index]uint16
 
-	omitSNIExtension bool
+	omitSNIExtension            bool
+	WithRandomTLSExtensionOrder bool
 
 	// certCompressionAlgs represents the set of advertised certificate compression
 	// algorithms, as specified in the ClientHello. This is only relevant client-side, for the
@@ -43,13 +44,13 @@ type UConn struct {
 
 // UClient returns a new uTLS client, with behavior depending on clientHelloID.
 // Config CAN be nil, but make sure to eventually specify ServerName.
-func UClient(conn net.Conn, config *Config, clientHelloID ClientHelloID) *UConn {
+func UClient(conn net.Conn, config *Config, clientHelloID ClientHelloID, withRandomTLSExtensionOrder bool) *UConn {
 	if config == nil {
 		config = &Config{}
 	}
 	tlsConn := Conn{conn: conn, config: config, isClient: true}
 	handshakeState := PubClientHandshakeState{C: &tlsConn, Hello: &PubClientHelloMsg{}}
-	uconn := UConn{Conn: &tlsConn, ClientHelloID: clientHelloID, HandshakeState: handshakeState}
+	uconn := UConn{Conn: &tlsConn, ClientHelloID: clientHelloID, HandshakeState: handshakeState, WithRandomTLSExtensionOrder: withRandomTLSExtensionOrder}
 	uconn.HandshakeState.uconn = &uconn
 	uconn.handshakeFn = uconn.clientHandshake
 	return &uconn
@@ -709,4 +710,31 @@ func makeSupportedVersions(minVers, maxVers uint16) []uint16 {
 		a[i] = maxVers - uint16(i)
 	}
 	return a
+}
+
+// Extending (*Conn).readHandshake() to support more customized handshake messages.
+func (c *Conn) utlsHandshakeMessageType(msgType byte) (handshakeMessage, error) {
+	switch msgType {
+	case utlsTypeCompressedCertificate:
+		return new(utlsCompressedCertificateMsg), nil
+	case utlsTypeEncryptedExtensions:
+		if c.isClient {
+			return new(encryptedExtensionsMsg), nil
+		} else {
+			return new(utlsClientEncryptedExtensionsMsg), nil
+		}
+	default:
+		return nil, c.in.setErrorLocked(c.sendAlert(alertUnexpectedMessage))
+	}
+}
+
+// Extending (*Conn).connectionStateLocked()
+func (c *Conn) utlsConnectionStateLocked(state *ConnectionState) {
+	state.PeerApplicationSettings = c.utls.peerApplicationSettings
+}
+
+type utlsConnExtraFields struct {
+	hasApplicationSettings   bool
+	peerApplicationSettings  []byte
+	localApplicationSettings []byte
 }

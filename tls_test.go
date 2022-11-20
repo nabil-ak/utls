@@ -828,6 +828,8 @@ func TestCloneNonFuncFields(t *testing.T) {
 			f.Set(reflect.ValueOf(RenegotiateOnceAsClient))
 		case "mutex", "autoSessionTicketKeys", "sessionTicketKeys":
 			continue // these are unexported fields that are handled separately
+		case "ApplicationSettings":
+			f.Set(reflect.ValueOf(map[string][]byte{"a": {1}}))
 		default:
 			t.Errorf("all fields must be accounted for, but saw unknown field %q", fn)
 		}
@@ -1256,35 +1258,35 @@ func TestClientHelloInfo_SupportsCertificate(t *testing.T) {
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{ECDSAWithP256AndSHA256},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, ""},
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{ECDSAWithP384AndSHA384},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, ""}, // TLS 1.2 does not restrict curves based on the SignatureScheme.
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  nil,
 			SupportedVersions: []uint16{VersionTLS12},
 		}, ""}, // TLS 1.2 comes with default signature schemes.
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_RSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{ECDSAWithP256AndSHA256},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, "cipher suite"},
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{ECDSAWithP256AndSHA256},
 			SupportedVersions: []uint16{VersionTLS12},
 			config: &Config{
@@ -1294,7 +1296,7 @@ func TestClientHelloInfo_SupportsCertificate(t *testing.T) {
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP384},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{ECDSAWithP256AndSHA256},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, "certificate curve"},
@@ -1308,7 +1310,7 @@ func TestClientHelloInfo_SupportsCertificate(t *testing.T) {
 		{ecdsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{PSSWithSHA256},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, "signature algorithms"},
@@ -1316,21 +1318,21 @@ func TestClientHelloInfo_SupportsCertificate(t *testing.T) {
 		{ed25519Cert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256}, // only relevant for ECDHE support
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{Ed25519},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, ""},
 		{ed25519Cert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{CurveP256}, // only relevant for ECDHE support
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{Ed25519},
 			SupportedVersions: []uint16{VersionTLS10},
 		}, "doesn't support Ed25519"},
 		{ed25519Cert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256},
 			SupportedCurves:   []CurveID{},
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SignatureSchemes:  []SignatureScheme{Ed25519},
 			SupportedVersions: []uint16{VersionTLS12},
 		}, "doesn't support ECDHE"},
@@ -1338,7 +1340,7 @@ func TestClientHelloInfo_SupportsCertificate(t *testing.T) {
 		{rsaCert, &ClientHelloInfo{
 			CipherSuites:      []uint16{TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA},
 			SupportedCurves:   []CurveID{CurveP256}, // only relevant for ECDHE support
-			SupportedPoints:   []uint8{pointFormatUncompressed},
+			SupportedPoints:   []uint8{PointFormatUncompressed},
 			SupportedVersions: []uint16{VersionTLS10},
 		}, ""},
 		{rsaCert, &ClientHelloInfo{
