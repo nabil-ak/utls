@@ -793,7 +793,7 @@ func (e *PreSharedKeyExtension) writeToUConn(uc *UConn) error {
 }
 
 func (e *PreSharedKeyExtension) Len() int {
-	return 24
+	return 51
 }
 
 func (e *PreSharedKeyExtension) Read(b []byte) (int, error) {
@@ -808,22 +808,29 @@ func (e *PreSharedKeyExtension) Read(b []byte) (int, error) {
 	b[2] = byte(extBodyLen >> 8)
 	b[3] = byte(extBodyLen)
 
-	// identity.length = 4 = b[4...8]
+	// identities.length = 4+6 = b[4...6]
 	b[4] = byte(0)
-	b[5] = byte(0)
+	b[5] = byte(10)
+	// identity.length = 4 = b[4...6]
 	b[6] = byte(0)
 	b[7] = byte(4)
-	// identity.body = b[8...12]
-
-	// obfuscated_ticket_age = b[12...16]
-
-	// PskBinderEntry.length = 4 = b[16...20]
+	// identity.body = b[6...10]
+	b[8] = byte(45)
+	b[9] = byte(80)
+	b[10] = byte(23)
+	b[11] = byte(168)
+	// obfuscated_ticket_age = b[10...14]
+	b[12] = byte(0)
+	b[13] = byte(0)
+	b[14] = byte(0)
+	b[15] = byte(0)
+	// PskBinderEntry.length = 4 = b[14...16]
 	b[16] = byte(0)
-	b[17] = byte(0)
-	b[18] = byte(0)
-	b[19] = byte(4)
-	// PskBinderEntry.body = b[20...24]
-
+	b[17] = byte(33)
+	// PskBinderEntry.body = b[16...20]
+	for i := 18; i < 51; i++ {
+		b[i] = byte(5)
+	}
 	return e.Len(), io.EOF
 }
 
